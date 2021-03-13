@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="styles.css">
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>qs</title>
+    </head>
+    <h1>
+      Find Your Questions
+    </h1>
+    <body>
+        <label for="tag"> Enter Tag
+            <input id = "tag" type="text" placeholder="e.g. windows"> <!--default type is text-->
+        </label>
+        <p>
+            <button onclick="getQuestions();">Submit</button> <!--sends the command to start extracting questions and show the answers-->
+        </p>
+        <p>
+          <button onclick="refresh()">Refresh</button> <!--refreshes the page-->
+      </p>
+    </body>
+</html>
+
+<!--The list of Top Newest Questions-->
+<div id="topNew" style="display: none"> Top 10 Newest Questions:
+  <!-- The 1st question -->
+  <button id = "question1" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q1"></p>
+  </div>
+  <!-- The 2nd question -->
+  <button id = "question2" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q2"></p>
+  </div>
+  <!-- The 3rd question -->
+  <button id = "question3" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q3"></p>
+  </div>
+  <!-- The 4th question -->
+  <button id = "question4" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q4"></p>
+  </div>
+  <!-- The 5th question -->
+  <button id = "question5" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q5"></p>
+  </div>
+  <!-- The 6th question -->
+  <button id = "question6" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q6"></p>
+  </div>
+  <!-- The 7th question -->
+  <button id = "question7" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q7"></p>
+  </div>
+  <!-- The 8th question -->
+  <button id = "question8" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q8"></p>
+  </div>
+  <!-- The 9th question -->
+  <button id = "question9" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q9"></p>
+  </div>
+  <!-- The 10th question -->
+  <button id = "question10" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "q10"></p>
+  </div>
+</div>
+<!--The list of Top Most Voted Questions-->
+<div id="topVote" style="display: none"> Top 10 Most Voted Questions: 
+  <!-- The 1st question -->
+  <button id = "qVote1" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv1"></p>
+  </div>
+  <!-- The 2nd question -->
+  <button id = "qVote2" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv2"></p>
+  </div>
+  <!-- The 3rd question -->
+  <button id = "qVote3" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv3"></p>
+  </div>
+  <!-- The 4th question -->
+  <button id = "qVote4" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv4"></p>
+  </div>
+  <!-- The 5th question -->
+  <button id = "qVote5" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv5"></p>
+  </div>
+  <!-- The 6th question -->
+  <button id = "qVote6" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv6"></p>
+  </div>
+  <!-- The 7th question -->
+  <button id = "qVote7" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv7"></p>
+  </div>
+  <!-- The 8th question -->
+  <button id = "qVote8" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv8"></p>
+  </div>
+  <!-- The 9th question -->
+  <button id = "qVote9" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv9"></p>
+  </div>
+  <!-- The 10th question -->
+  <button id = "qVote10" type="button" class="collapsible"></button>
+  <div class="content">
+    <p id = "qv10"></p>
+  </div>
+</div>
+
+<!--Place that prints the response time-->
+<p id="responseTime"> </p>
+
+<!--Main method that extracts the tag value and finds the questions-->
+<script>
+  function getQuestions() {
+    //start tracking time
+    var startTime = new Date(); 
+    //get the tag to look for
+    var x = document.getElementById("tag");
+    var tag = x.value;
+
+    var HttpClient = function() {
+      this.get = function(aUrl, aCallback) {
+      var anHttpRequest = new XMLHttpRequest();
+      anHttpRequest.onreadystatechange = function() { 
+        if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200){
+          aCallback(anHttpRequest.responseText);
+        }
+      }
+        anHttpRequest.open( "GET", aUrl, true ); 
+        anHttpRequest.send( null ); 
+      }
+    }
+    //get the list of top new questions
+    var startTime = new Date();
+
+    var toDate = new Date(startTime.getFullYear(), startTime.getMonth()-1, startTime.getDate());
+    //date - 7 days
+    var date = 0;
+    if(startTime.getDate()>6){
+      date = startTime.getDate() - 7; 
+    }
+    var fromDate = new Date(startTime.getFullYear(), startTime.getMonth()-1, date);
+    var theurl = 'https://api.stackexchange.com/2.2/questions?fromdate=1614556800&todate=1615507200&order=desc&sort=creation&tagged=' + tag + '&site=stackoverflow';    var theurl=  'https://api.stackexchange.com/2.2/questions?fromdate=' + 1614556800 + '&todate=' + 1615507200 + '&order=desc&sort=creation&tagged=' + tag + '&site=stackoverflow&filter=!)rTkr_OQb9hHDZCX_(1u';
+    var client = new HttpClient();
+    client.get(theurl, function(response) { 
+      var response1 = JSON.parse(response);
+      var number = 10;
+      if(response1.items.length < 10){
+        number = response1.items.length; 
+      }
+      for(var j=0; j<number; j++){
+        var titleText = response1.items[j].title + "<br>" + "CreationDate: " + response1.items[j].creation_date + "   Votes#: " + response1.items[j].up_vote_count;
+        var innerText = response1.items[j].body + "<br>";
+        if(response1.items[j].is_answered){
+          innerText = innerText + "Answers: " ;
+          for (var i=0; i<response1.items[j].answers.length; i++){
+            innerText = innerText + "<br> Name" + response1.items[j].answers[i].owner.display_name + "<br>" + response1.items[j].answers[i].body + "<br> CreationDate: " +  response1.items[j].answers[i].up_vote_count + "   Votes#: " + response1.items[j].answers[i].up_vote_count;
+          }
+        }
+        else{
+          innerText = innerText + "There are no answers yet";
+        }
+        var elementId = "question" + (j+1);
+        document.getElementById(elementId).innerHTML = titleText;
+        elementId = "q" + (j+1);
+        document.getElementById(elementId).innerHTML = innerText;
+      }
+    }); 
+
+    var voteUrl='https://api.stackexchange.com/2.2/questions?fromdate=' + 1614556800 + '&todate=' + 1615507200 + '&order=desc&sort=votes&tagged=' + tag + '&site=stackoverflow&filter=!)rTkr_OQb9hHDZCX_(1u';
+    var clientVote = new HttpClient();
+    clientVote.get(voteUrl, function(response) { 
+      var response1 = JSON.parse(response);
+      var number = 10;
+      if(response1.items.length < 10){
+        number = response1.items.length; 
+      }
+      for(var k=0; k<number; k++){
+        var titleText = response1.items[k].title + "<br>" + "CreationDate: " + response1.items[k].creation_date + "   Votes#: " + response1.items[k].up_vote_count;
+        var innerText = "Question: " + response1.items[k].body + "<br>";
+        if(response1.items[k].is_answered){
+          innerText = innerText + "Answers: ";
+          for (var i=0; i<response1.items[k].answers.length; i++){
+            innerText = innerText + "<br> Name" + response1.items[k].answers[i].owner.display_name + "<br>" + response1.items[k].answers[i].body + "<br> CreationDate: " +  response1.items[k].answers[i].up_vote_count + "   Votes#: " + response1.items[k].answers[i].up_vote_count;
+          }
+        }
+        else{
+          innerText = innerText + "There are no answers yet";
+        }
+        var elementId = "qVote" + (k+1);
+        document.getElementById(elementId).innerHTML = titleText;
+        elementId = "qv" + (k+1);
+        document.getElementById(elementId).innerHTML = innerText;
+      }
+    }); 
+    //used to fill with title, creation date and vote#
+    Show(startTime);
+  }
+</script>
+
+<script>
+//<script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></
+//script>
+</script>
+
+<!--JS library to use StackExchange API
+<script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'>
+</script>-->
+
+
+
+<!--Used to Show the Questions after the tag is entered-->
+<script>
+  function Show(startTime) {
+    var x = document.getElementById("topNew");
+    var y = document.getElementById("topVote");
+    x.style.display = "block";
+    y.style.display = "block";
+    responseTime(startTime);
+  }
+</script>
+
+<!--This script is used to calculate the response time-->
+<script>
+  function responseTime(startTime){
+    var endTime = new Date();
+    var timeDifference = startTime.getTime() - endTime.getTime();
+    var secondsFromStartToEnd = timeDifference / 1000;
+    var responseTime = Math.abs(secondsFromStartToEnd);
+
+    document.getElementById("responseTime").innerHTML = "Response Time is: " + responseTime + " seconds";
+  }
+</script>
+
+<!--This script is used to refresh the page-->
+<script>
+  function refresh() {
+    location.reload();
+  }
+</script>
+
+<!--This script is to create a collapsible-->
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+</script>
+</body>
+</html>
