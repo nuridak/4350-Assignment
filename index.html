@@ -177,7 +177,7 @@
         if(response1.items[j].is_answered){
           innerText = innerText + "Answers: " ;
           for (var i=0; i<response1.items[j].answers.length; i++){
-            innerText = innerText + "<br> Name" + response1.items[j].answers[i].owner.display_name + "<br>" + response1.items[j].answers[i].body + "<br> CreationDate: " +  response1.items[j].answers[i].up_vote_count + "   Votes#: " + response1.items[j].answers[i].up_vote_count;
+            innerText = innerText + "<br> Name: " + response1.items[j].answers[i].owner.display_name + "<br>" + response1.items[j].answers[i].body + "<br> CreationDate: " +  response1.items[j].answers[i].up_vote_count + "   Votes#: " + response1.items[j].answers[i].up_vote_count;
           }
         }
         else{
@@ -220,17 +220,6 @@
     Show(startTime);
   }
 </script>
-
-<script>
-//<script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'></
-//script>
-</script>
-
-<!--JS library to use StackExchange API
-<script type='text/javascript' src='https://api.stackexchange.com/js/2.0/all.js'>
-</script>-->
-
-
 
 <!--Used to Show the Questions after the tag is entered-->
 <script>
